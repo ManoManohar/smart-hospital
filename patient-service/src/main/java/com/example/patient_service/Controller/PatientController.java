@@ -1,14 +1,36 @@
 package com.example.patient_service.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.patient_service.Model.Patient;
+import com.example.patient_service.Service.PatientService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/sample")
+@RequestMapping("/api/patients")
 public class PatientController {
-    @GetMapping("/get")
-    public String get(){
-        return "hi hello";
+
+    private final PatientService service;
+
+    public PatientController(PatientService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/save")
+    public Patient save(@RequestBody Patient patient) {
+        return service.savePatient(patient);
+    }
+
+    @GetMapping
+    public List<Patient> getAll() {
+        return service.getAllPatients();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Patient> getById(@PathVariable Long id) {
+        Patient p = service.getPatientById(id);
+        return p != null ? ResponseEntity.ok(p) : ResponseEntity.notFound().build();
     }
 }
