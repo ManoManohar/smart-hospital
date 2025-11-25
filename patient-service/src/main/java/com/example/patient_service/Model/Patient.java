@@ -2,7 +2,12 @@ package com.example.patient_service.Model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
+
 
 @Entity
 @Table(name = "patientDB")
@@ -11,10 +16,23 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Name is mandatory")
     private String name;
+    @NotNull(message="")
+    @Min(value = 0, message = "Age cannot be negative")
     private int age;
-    private String conditionStatus;
+    @NotBlank(message = "Contact number is mandatory")
+    @Pattern(regexp = "\\d{10}", message = "Contact number must be 10 digits")
+    private String contactNumber;
+    private String medicalHistory;
+
+    public Patient(Long id, String name, int age, String contactNumber, String medicalHistory) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.contactNumber = contactNumber;
+        this.medicalHistory = medicalHistory;
+    }
 
     public Long getId() {
         return id;
@@ -40,19 +58,20 @@ public class Patient {
         this.age = age;
     }
 
-    public String getConditionStatus() {
-        return conditionStatus;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setConditionStatus(String conditionStatus) {
-        this.conditionStatus = conditionStatus;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
-    public Patient(Long id, String name, int age, String conditionStatus) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.conditionStatus = conditionStatus;
+    public String getMedicalHistory() {
+        return medicalHistory;
+    }
+
+    public void setMedicalHistory(String medicalHistory) {
+        this.medicalHistory = medicalHistory;
     }
 
     public Patient() {
