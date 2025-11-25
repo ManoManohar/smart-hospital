@@ -39,6 +39,7 @@ public class PatientServiceImpl implements PatientService{
         logger.info("getting patient with id: {}", id);
         return patientRepo.findById(id)
                 .or(() -> {
+                    logger.warn("Patient not found with id: {}", id);
                     throw new ResourceNotFoundException("Patient not found with id " + id);
                 });
     }
@@ -47,7 +48,13 @@ public class PatientServiceImpl implements PatientService{
     @Override
     public void deletePatient(Long id) {
         logger.info("Deleting patient with id: {}", id);
-        patientRepo.deleteById(id);
+        Patient patient = patientRepo.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Attempt to delete non-existing patient with id: {}", id);
+                    return new ResourceNotFoundException("Patient not found with id " + id);
+                });
+        patientRepo.delete(patient);
+        logger.info("Deleted patient with id: {}", id);
     }
 
     @Override
@@ -58,9 +65,12 @@ public class PatientServiceImpl implements PatientService{
             patient.setAge(patientDetails.getAge());
             patient.setContactNumber(patientDetails.getContactNumber());
             patient.setMedicalHistory(patientDetails.getMedicalHistory());
-            Patient updated = patientRepo.save(patient);
-            logger.info("Updated patient with id: {}", updated.getId());
-            return updated;
-        }).orElseThrow(() -> new ResourceNotFoundException("Patient not found with id " + id));
+            Patient savedPatient = patientRepo.save(patient);
+            logger.info("Updated patient with id: {}", savedPatient.getId());
+            return savedPatient;
+        }).orElseThrow(() -> {
+            logger.warn("Patient not found for update with id: {}", id);
+            return new ResourceNotFoundException("Patient not found with id " + id);
+        });
     }
 }

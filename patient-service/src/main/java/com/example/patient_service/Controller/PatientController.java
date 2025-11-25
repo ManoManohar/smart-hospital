@@ -25,28 +25,28 @@ public class PatientController {
     }
 
     @GetMapping("/getAllPatients")
-    public List<Patient> getAll() {
-        return service.getAllPatients();
+    public ResponseEntity<List<Patient>> getAll() {
+        List<Patient> patients = service.getAllPatients();
+        return ResponseEntity.ok(patients);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Patient>> getPatientById(@PathVariable Long id) {
+        // The service throws ResourceNotFoundException if not found, handled globally
         Optional<Patient> patient = service.getPatientById(id);
         return ResponseEntity.ok(patient);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
+        // Service throws exception if patient not found
         Patient updatedPatient = service.updatePatient(id, patient);
-        if (updatedPatient == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(updatedPatient);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+        // Exception if patient not found handled by service/global exception handler
         service.deletePatient(id);
         return ResponseEntity.noContent().build();
     }
