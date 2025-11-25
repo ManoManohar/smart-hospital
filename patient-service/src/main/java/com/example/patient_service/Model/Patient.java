@@ -2,7 +2,12 @@ package com.example.patient_service.Model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
+
 
 @Entity
 @Table(name = "patientDB")
@@ -11,9 +16,13 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Name is mandatory")
     private String name;
+    @NotNull(message="")
+    @Min(value = 0, message = "Age cannot be negative")
     private int age;
+    @NotBlank(message = "Contact number is mandatory")
+    @Pattern(regexp = "\\d{10}", message = "Contact number must be 10 digits")
     private String contactNumber;
     private String medicalHistory;
 

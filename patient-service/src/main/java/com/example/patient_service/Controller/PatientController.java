@@ -2,11 +2,11 @@ package com.example.patient_service.Controller;
 
 import com.example.patient_service.Model.Patient;
 import com.example.patient_service.Service.PatientService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")
@@ -30,10 +30,11 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> getById(@PathVariable Long id) {
-        Patient p = service.getPatientById(id);
-        return p != null ? ResponseEntity.ok(p) : ResponseEntity.notFound().build();
+    public ResponseEntity<Optional<Patient>> getPatientById(@PathVariable Long id) {
+        Optional<Patient> patient = service.getPatientById(id);
+        return ResponseEntity.ok(patient);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
