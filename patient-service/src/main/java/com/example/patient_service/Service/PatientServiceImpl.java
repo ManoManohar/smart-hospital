@@ -28,4 +28,16 @@ public class PatientServiceImpl implements PatientService{
     public Patient getPatientById(Long id) {
         return patientRepo.findById(id).orElse(null);
     }
+    public void deletePatient(Long id) {
+        patientRepo.deleteById(id);
+    }
+    public Patient updatePatient(Long id, Patient patientDetails) {
+        return patientRepo.findById(id).map(patient -> {
+            patient.setName(patientDetails.getName());
+            patient.setAge(patientDetails.getAge());
+            patient.setContactNumber(patientDetails.getContactNumber());
+            patient.setMedicalHistory(patientDetails.getMedicalHistory());
+            return patientRepo.save(patient);
+        }).orElse(null);
+    }
 }

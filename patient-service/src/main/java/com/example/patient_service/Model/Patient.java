@@ -14,7 +14,16 @@ public class Patient {
 
     private String name;
     private int age;
-    private String conditionStatus;
+    private String contactNumber;
+    private String medicalHistory;
+
+    public Patient(Long id, String name, int age, String contactNumber, String medicalHistory) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.contactNumber = contactNumber;
+        this.medicalHistory = medicalHistory;
+    }
 
     public Long getId() {
         return id;
@@ -40,19 +49,20 @@ public class Patient {
         this.age = age;
     }
 
-    public String getConditionStatus() {
-        return conditionStatus;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
-    public void setConditionStatus(String conditionStatus) {
-        this.conditionStatus = conditionStatus;
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
-    public Patient(Long id, String name, int age, String conditionStatus) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.conditionStatus = conditionStatus;
+    public String getMedicalHistory() {
+        return medicalHistory;
+    }
+
+    public void setMedicalHistory(String medicalHistory) {
+        this.medicalHistory = medicalHistory;
     }
 
     public Patient() {
